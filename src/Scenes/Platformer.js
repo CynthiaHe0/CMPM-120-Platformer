@@ -14,6 +14,7 @@ class Platformer extends Phaser.Scene {
     }
 
     create() {
+        this.scoreText = this.add.bitmapText(50, 20, 'text', 'Score: 0', 32);
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 25);
@@ -100,6 +101,9 @@ class Platformer extends Phaser.Scene {
             // TODO: set a Y velocity to have the player "jump" upwards (negative Y direction)
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
         }
+
+        //Keep the score onscreen by having it follow the camera
+        this.scoreText.setPosition(this.cameras.main.x, this.cameras.main.y);
     }
     coinPickup(player, coin){
         coin.visible = false;
@@ -107,6 +111,7 @@ class Platformer extends Phaser.Scene {
         //console.log(tile_removed[0].index);
         if (tile_removed[0].index != -1){
             this.score += 10;
+            this.scoreText.setText("Score: " + this.score);
         }
     }
     scoreUpdate(){
