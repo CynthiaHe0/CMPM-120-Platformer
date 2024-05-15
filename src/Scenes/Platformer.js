@@ -32,13 +32,26 @@ class Platformer extends Phaser.Scene {
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
         this.groundLayer.setScale(2.0);
-        //console.log(getBounds(this.physics.world));
         this.physics.world.setBounds(0, 0, 18*240, 18*60);
 
         // Make it collidable
         this.groundLayer.setCollisionByProperty({
             collides: true
         });
+        console.log(this.groundLayer);
+        this.hazards = this.physics.add.group();
+        let water_tiles = this.groundLayer.filterTiles((tile)=>{
+            //console.log(tile);
+            if (tile.index == 34 || tile.index == 44){
+                return true;
+            }
+            return false;
+        },);
+        console.log(water_tiles);
+        for (let tile of water_tiles){
+            //this.hazards.add(tile);
+            tile.visible = false;
+        }
 
         // set up player avatar
         my.sprite.player = this.physics.add.sprite(game.config.width/4, game.config.height/2, "platformer_characters", "tile_0000.png").setScale(SCALE)
@@ -104,11 +117,6 @@ class Platformer extends Phaser.Scene {
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
         }
 
-        //Keep the score onscreen by having it follow the camera
-        //For some reason, the score wraps?
-        /*let camX = (my.sprite.player.x - this.game.config.width/2) < 40 ? 40 : my.sprite.player.x - this.game.config.width/2;
-        let camY = (my.sprite.player.y - this.game.config.height/2) < 180 ? 180 : my.sprite.player.y - this.game.config.height/2;
-        this.scoreText.setPosition(camX, camY);*/
     }
     coinPickup(player, coin){
         coin.visible = false;
