@@ -6,16 +6,17 @@ class Platformer extends Phaser.Scene {
     init() {
         // variables and settings
         this.ACCELERATION = 500;
-        this.DRAG = 1000;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1500;
-        this.JUMP_VELOCITY = -900;
+        this.JUMP_VELOCITY = -700;
         this.MAX_SPEED = 900;
         this.score = 0;
     }
 
     create() {
-        this.scoreText = this.add.bitmapText(50, 20, 'text', 'Score: 0', 32);
-        this.scoreText.
+        this.scoreText = this.add.bitmapText(20, 20, 'text', 'Score: 0', 32);
+        this.scoreText.scrollFactorX = 0
+        this.scoreText.scrollFactorY = 0.
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 25);
@@ -105,9 +106,9 @@ class Platformer extends Phaser.Scene {
 
         //Keep the score onscreen by having it follow the camera
         //For some reason, the score wraps?
-        let camX = (my.sprite.player.x - this.game.config.width/2 + 40) < 0 ? 40 : this.game.config.width + 40;
-        let camY = (my.sprite.player.y - this.game.config.height/2 + 180) < 0 ? 180 : this.game.config.height + 180;
-        this.scoreText.setPosition(camX, camY);
+        /*let camX = (my.sprite.player.x - this.game.config.width/2) < 40 ? 40 : my.sprite.player.x - this.game.config.width/2;
+        let camY = (my.sprite.player.y - this.game.config.height/2) < 180 ? 180 : my.sprite.player.y - this.game.config.height/2;
+        this.scoreText.setPosition(camX, camY);*/
     }
     coinPickup(player, coin){
         coin.visible = false;
