@@ -15,6 +15,7 @@ class Platformer extends Phaser.Scene {
 
     create() {
         this.scoreText = this.add.bitmapText(50, 20, 'text', 'Score: 0', 32);
+        this.scoreText.
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 25);
@@ -103,7 +104,10 @@ class Platformer extends Phaser.Scene {
         }
 
         //Keep the score onscreen by having it follow the camera
-        this.scoreText.setPosition(this.cameras.main.x, this.cameras.main.y);
+        //For some reason, the score wraps?
+        let camX = (my.sprite.player.x - this.game.config.width/2 + 40) < 0 ? 40 : this.game.config.width + 40;
+        let camY = (my.sprite.player.y - this.game.config.height/2 + 180) < 0 ? 180 : this.game.config.height + 180;
+        this.scoreText.setPosition(camX, camY);
     }
     coinPickup(player, coin){
         coin.visible = false;
