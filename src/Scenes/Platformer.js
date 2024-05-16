@@ -32,7 +32,7 @@ class Platformer extends Phaser.Scene {
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
         this.groundLayer.setScale(2.0);
-        this.physics.world.setBounds(0, 0, 18*240, 18*60);
+        this.physics.world.setBounds(0, 0, this.map.widthInPixels*2, this.map.heightInPixels*2);
 
         // Make it collidable
         this.groundLayer.setCollisionByProperty({
@@ -48,13 +48,14 @@ class Platformer extends Phaser.Scene {
             return false;
         },);
         console.log(water_tiles);
-        for (let tile of water_tiles){
+        /*for (let tile of water_tiles){
             //this.hazards.add(tile);
             tile.visible = false;
-        }
+        }*/
+        //this.physics.add.overlap(my.sprite.player, water_tiles, this.cantSwim, null, this);
 
         // set up player avatar
-        my.sprite.player = this.physics.add.sprite(game.config.width/4, game.config.height/2, "platformer_characters", "tile_0000.png").setScale(SCALE)
+        my.sprite.player = this.physics.add.sprite(game.config.width/4, 2*game.config.height/3, "platformer_characters", "tile_0000.png").setScale(SCALE)
         my.sprite.player.body.setSize(15, 15);
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.body.setMaxSpeed(this.MAX_SPEED);
@@ -66,8 +67,12 @@ class Platformer extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         //Have camera follow player
-        this.cameras.main.startFollow(my.sprite.player, true, 0.5, 0.5, -50);
-        this.cameras.main.setBounds(0, 0, 18*240, 18*60);
+        this.cameras.main.setZoom(1.5);
+        this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
+        //this.cameras.main.startFollow();
+        this.cameras.main.setBounds(0, 0, this.map.widthInPixels*2, this.map.heightInPixels*2);
+        //this.cameras.main.setScroll(game.config.width/2, game.config.height/2);
+        
 
         //Set up coins
         this.coins = this.map.createLayer("Coins", this.tileset, 0, 0);
@@ -88,6 +93,7 @@ class Platformer extends Phaser.Scene {
     update() {
         //check if coin object is visible
         //If visible, play animation
+        this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
         if(cursors.left.isDown) {
             // TODO: have the player accelerate to the left
             my.sprite.player.body.setAccelerationX(-this.ACCELERATION);
@@ -127,7 +133,7 @@ class Platformer extends Phaser.Scene {
             this.scoreText.setText("Score: " + this.score);
         }
     }
-    scoreUpdate(){
-        //change the numbers displayed
+    cantSwim(player, water){
+        
     }
 }
