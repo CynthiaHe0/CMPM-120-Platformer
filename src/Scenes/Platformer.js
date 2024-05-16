@@ -11,9 +11,12 @@ class Platformer extends Phaser.Scene {
         this.JUMP_VELOCITY = -700;
         this.MAX_SPEED = 900;
         this.score = 0;
+        this.spawnX = game.config.width/4;
+        this.spawnY = 2*game.config.height/3;
     }
 
     create() {
+
         this.scoreText = this.add.bitmapText(20, 20, 'text', 'Score: 0', 32);
         this.scoreText.scrollFactorX = 0
         this.scoreText.scrollFactorY = 0.
@@ -38,8 +41,8 @@ class Platformer extends Phaser.Scene {
         this.groundLayer.setCollisionByProperty({
             collides: true
         });
-        console.log(this.groundLayer);
-        this.hazards = this.physics.add.group();
+        //console.log(this.groundLayer);
+        //this.hazards = this.physics.add.group();
         let water_tiles = this.groundLayer.filterTiles((tile)=>{
             //console.log(tile);
             if (tile.index == 34 || tile.index == 44){
@@ -47,11 +50,10 @@ class Platformer extends Phaser.Scene {
             }
             return false;
         },);
-        console.log(water_tiles);
-        /*for (let tile of water_tiles){
-            //this.hazards.add(tile);
-            tile.visible = false;
-        }*/
+        //console.log(water_tiles);
+        for (let tile of water_tiles){
+            tile.setCollisionCallback(this.respawn, this);
+        }
         //this.physics.add.overlap(my.sprite.player, water_tiles, this.cantSwim, null, this);
 
         // set up player avatar
@@ -65,14 +67,13 @@ class Platformer extends Phaser.Scene {
 
         // set up Phaser-provided cursor key input
         cursors = this.input.keyboard.createCursorKeys();
-
+        
         //Have camera follow player
         this.cameras.main.setZoom(1.5);
         this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
-        //this.cameras.main.startFollow();
+        this.cameras.main.startFollow(my.sprite.player, false, 0.5, 0.5);
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels*2, this.map.heightInPixels*2);
         //this.cameras.main.setScroll(game.config.width/2, game.config.height/2);
-        
 
         //Set up coins
         this.coins = this.map.createLayer("Coins", this.tileset, 0, 0);
@@ -81,6 +82,14 @@ class Platformer extends Phaser.Scene {
             coin: true
         });
         this.physics.add.overlap(my.sprite.player, this.coins, this.coinPickup, null, this);
+
+        //Set up flags
+        this.flags = this.map.createLayer("Flags", this.tileset, 0, 0);
+        this.flags.setScale(2);
+        this.flags.setCollisionByProperty({
+            collides: true
+        });
+        this.physics.add.overlap(my.sprite.player, this.flags, this.checkPoint, null, this);
 
         // debug key listener (assigned to D key)
         this.input.keyboard.on('keydown-D', () => {
@@ -93,7 +102,6 @@ class Platformer extends Phaser.Scene {
     update() {
         //check if coin object is visible
         //If visible, play animation
-        this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
         if(cursors.left.isDown) {
             // TODO: have the player accelerate to the left
             my.sprite.player.body.setAccelerationX(-this.ACCELERATION);
@@ -122,7 +130,8 @@ class Platformer extends Phaser.Scene {
             // TODO: set a Y velocity to have the player "jump" upwards (negative Y direction)
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
         }
-
+        //this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
+        //console.log("X: "+my.sprite.player.x+", Y: "+my.sprite.player.y );
     }
     coinPickup(player, coin){
         coin.visible = false;
@@ -133,7 +142,18 @@ class Platformer extends Phaser.Scene {
             this.scoreText.setText("Score: " + this.score);
         }
     }
-    cantSwim(player, water){
-        
+    checkPoint(player, flag){
+        //console.log(flag);
+        if (flag.index == 112){
+            this.spawnX = flag.x * 36;
+            this.spawnY = flag.y * 36;
+        } else if (flag.index == 132){
+            this.spawnX = flag.x* 36;
+            this.spawnY = (flag.y - 1)* 36;
+        }
+    }
+    respawn(){
+        my.sprite.player.x = this.spawnX;
+        my.sprite.player.y = this.spawnY;
     }
 }
