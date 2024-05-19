@@ -2,7 +2,9 @@ class Platformer extends Phaser.Scene {
     constructor() {
         super("platformerScene");
     }
-
+    preload(){
+        this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
+    }
     init() {
         // variables and settings
         this.ACCELERATION = 500;
@@ -28,6 +30,11 @@ class Platformer extends Phaser.Scene {
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.tileset = this.map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
+
+        //Use the animation (NOT WORKING!!!!!!)
+        //this.animatedTiles.init(this.map);
+
+
         //Create background I guess
         this.background = this.map.createLayer("Background", this.tileset, 0, 0);
         this.background.setScale(2.0);
@@ -52,7 +59,7 @@ class Platformer extends Phaser.Scene {
         },);
         //console.log(water_tiles);
         for (let tile of water_tiles){
-            tile.setCollisionCallback(this.respawn, this);
+            tile.setCollisionCallback(this.waterDeath, this);
         }
         //this.physics.add.overlap(my.sprite.player, water_tiles, this.cantSwim, null, this);
 
@@ -82,6 +89,7 @@ class Platformer extends Phaser.Scene {
             coin: true
         });
         this.physics.add.overlap(my.sprite.player, this.coins, this.coinPickup, null, this);
+        this.coinSound = this.sound.add("coin collected sound");
 
         //Set up flags
         this.flags = this.map.createLayer("Flags", this.tileset, 0, 0);
@@ -138,6 +146,7 @@ class Platformer extends Phaser.Scene {
         let tile_removed = this.map.removeTile(coin);
         //console.log(tile_removed[0].index);
         if (tile_removed[0].index != -1){
+            this.coinSound.play();
             this.score += 10;
             this.scoreText.setText("Score: " + this.score);
         }
@@ -151,6 +160,10 @@ class Platformer extends Phaser.Scene {
             this.spawnX = flag.x* 36;
             this.spawnY = (flag.y - 1)* 36;
         }
+    }
+    waterDeath(){
+        //play animation
+        this.respawn();
     }
     respawn(){
         my.sprite.player.x = this.spawnX;
