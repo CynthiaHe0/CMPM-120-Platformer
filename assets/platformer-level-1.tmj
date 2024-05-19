@@ -1536,6 +1536,15 @@
                         }]
                 }, 
                 {
+                 "animation":[
+                        {
+                         "duration":200,
+                         "tileid":151
+                        }, 
+                        {
+                         "duration":200,
+                         "tileid":152
+                        }],
                  "id":151,
                  "properties":[
                         {

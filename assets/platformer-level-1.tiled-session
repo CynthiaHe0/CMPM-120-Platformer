@@ -3,20 +3,35 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "platformer-level-1.tmx",
+    "activeFile": "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx",
     "expandedProjectPaths": [
         "."
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
             "scaleInEditor": 1
         },
-        "platformer-level-1.tmx": {
-            "scale": 0.75,
+        "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
+            "scale": 1.7702546296296295,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1047.3333333333335,
-                "y": 217.99999999999994
+                "x": 398.8126838836221,
+                "y": 224.54396861719516
+            }
+        },
+        "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx#kenny_tilemap_packed": {
+            "scaleInDock": 1
+        },
+        "platformer-level-1.tmx": {
+            "scale": 0.75,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 592.6666666666665,
+                "y": 51.33333333333326
             }
         },
         "platformer-level-1.tmx#kenny_tilemap_packed": {
@@ -24,7 +39,7 @@
             "scaleInEditor": 1
         }
     },
-    "last.exportedFilePath": "C:/Users/Cynthia/Desktop/CMPM-120/StarterPlatformer/assets",
+    "last.exportedFilePath": "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets",
     "last.imagePath": "C:/Users/Cynthia/Desktop/CMPM-120/StarterPlatformer/assets",
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
@@ -32,11 +47,12 @@
     "map.tileWidth": 18,
     "map.width": 40,
     "openFiles": [
-        "platformer-level-1.tmx"
+        "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx"
     ],
     "project": "platformer-level-1.tiled-project",
     "property.type": "bool",
     "recentFiles": [
+        "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx",
         "platformer-level-1.tmx"
     ],
     "tileset.embedInMap": true,

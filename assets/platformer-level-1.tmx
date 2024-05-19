@@ -767,6 +767,10 @@
     <property name="coin" type="bool" value="true"/>
     <property name="collides" type="bool" value="false"/>
    </properties>
+   <animation>
+    <frame tileid="151" duration="200"/>
+    <frame tileid="152" duration="200"/>
+   </animation>
   </tile>
   <tile id="152">
    <properties>
