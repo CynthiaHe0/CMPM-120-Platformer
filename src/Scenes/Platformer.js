@@ -13,8 +13,8 @@ class Platformer extends Phaser.Scene {
         this.JUMP_VELOCITY = -700;
         this.MAX_SPEED = 900;
         this.score = 0;
-        this.spawnX = game.config.width/4;
-        this.spawnY = 2*game.config.height/3;
+        this.spawnX = game.config.width/5;
+        this.spawnY = 5*game.config.height/6;
     }
 
     create() {
@@ -64,7 +64,7 @@ class Platformer extends Phaser.Scene {
         //this.physics.add.overlap(my.sprite.player, water_tiles, this.cantSwim, null, this);
 
         // set up player avatar
-        my.sprite.player = this.physics.add.sprite(game.config.width/4, 2*game.config.height/3, "platformer_characters", "tile_0000.png").setScale(SCALE)
+        my.sprite.player = this.physics.add.sprite(this.spawnX, this.spawnY, "platformer_characters", "tile_0000.png").setScale(SCALE)
         my.sprite.player.body.setSize(15, 15);
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.body.setMaxSpeed(this.MAX_SPEED);
@@ -98,6 +98,30 @@ class Platformer extends Phaser.Scene {
             collides: true
         });
         this.physics.add.overlap(my.sprite.player, this.flags, this.checkPoint, null, this);
+
+        this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: 1, startAt: 5000 });
+        let line = new Phaser.Geom.Line(0, 0, 20, 0);
+        this.bubblesVFX = this.add.particles(0, 0, "kenny-particles", {
+            frame: 'circle_01.png',
+            emitZone: { 
+                type: 'random', // also try 'random' for rain-like effect 🌈
+                source: line, 
+                quantity: 100, 
+                yoyo: true,
+            },
+            //x: {random: [-50, 50 ] },
+            //radial: true,
+            scale: {start: 0.001, end: 0.03},
+            // TODO: Try: maxAliveParticles: 8,
+            maxAliveParticles: 8,
+            lifespan: 500,
+            // TODO: Try: gravityY: -400,
+            gravityY: -200,
+            //quantity: 250,
+            tintFill: 0xFFFF00,
+        });
+
+        this.bubblesVFX.stop();
 
         // debug key listener (assigned to D key)
         this.input.keyboard.on('keydown-D', () => {
@@ -163,10 +187,18 @@ class Platformer extends Phaser.Scene {
     }
     waterDeath(){
         //play animation
+        this.physics.world.gravity.y = 500;
+        this.bubblesVFX.start();
+        this.bubblesVFX.startFollow(my.sprite.player, -5, -15, false);
         this.respawn();
+        //this.bubblesVFX.stop();
     }
     respawn(){
+        this.physics.world.gravity.y = 1500;
         my.sprite.player.x = this.spawnX;
         my.sprite.player.y = this.spawnY;
+    }
+    timedEvent(){
+        console.log("Hi! I am timed!");
     }
 }
