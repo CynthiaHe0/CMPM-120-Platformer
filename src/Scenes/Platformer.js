@@ -15,6 +15,8 @@ class Platformer extends Phaser.Scene {
         this.score = 0;
         this.spawnX = game.config.width/5;
         this.spawnY = 5*game.config.height/6;
+        this.playerStates = {};
+        this.playerStates.inWater = false;
     }
 
     create() {
@@ -99,7 +101,7 @@ class Platformer extends Phaser.Scene {
         });
         this.physics.add.overlap(my.sprite.player, this.flags, this.checkPoint, null, this);
 
-        this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: 1, startAt: 5000 });
+        this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: -1, startAt: 5000 });
         let line = new Phaser.Geom.Line(0, 0, 20, 0);
         this.bubblesVFX = this.add.particles(0, 0, "kenny-particles", {
             frame: 'circle_01.png',
@@ -122,6 +124,7 @@ class Platformer extends Phaser.Scene {
         });
 
         this.bubblesVFX.stop();
+
 
         // debug key listener (assigned to D key)
         this.input.keyboard.on('keydown-D', () => {
@@ -186,15 +189,31 @@ class Platformer extends Phaser.Scene {
         }
     }
     waterDeath(){
-        //play animation
-        this.physics.world.gravity.y = 500;
-        this.bubblesVFX.start();
-        this.bubblesVFX.startFollow(my.sprite.player, -5, -15, false);
-        this.respawn();
-        //this.bubblesVFX.stop();
+        if (this.playerStates.inWater == false){
+            //This is to prevent it from triggering multiple times
+            this.playerStates.inWater = true;
+            //This is because gravity wasn't playing fair with the tween
+            this.physics.world.gravity.y = 0;
+            this.bubblesVFX.start();
+            this.bubblesVFX.startFollow(my.sprite.player, -5, -15, false);
+            //Fun fact, the tween destroys itself after playing ._.
+            //That or the this context was screwing me over earlier
+            this.drowning = this.tweens.add({
+                targets: my.sprite.player,
+                y: my.sprite.player.y + 100,
+                duration: 1000,
+                ease: 'Linear',
+            });
+            this.drowning.on('complete', () => {
+                this.bubblesVFX.stop();
+                this.playerStates.inWater = false;
+                this.physics.world.gravity.y = 1500;
+                this.respawn();
+            });
+        }
     }
     respawn(){
-        this.physics.world.gravity.y = 1500;
+        //this.physics.world.gravity.y = 1500;
         my.sprite.player.x = this.spawnX;
         my.sprite.player.y = this.spawnY;
     }
