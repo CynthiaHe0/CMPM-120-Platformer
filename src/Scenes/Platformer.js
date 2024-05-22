@@ -17,6 +17,7 @@ class Platformer extends Phaser.Scene {
         this.spawnY = 5*game.config.height/6;
         this.playerStates = {};
         this.playerStates.inWater = false;
+        this.playerStates.stepSounds = false;
     }
 
     create() {
@@ -41,13 +42,13 @@ class Platformer extends Phaser.Scene {
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         //this.skyColors = this.map.addTilesetImage("Parallax maybe", "big background");
         this.tileset = this.map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
-
+        this.caveColors = this.map.addTilesetImage("Parallax maybe", "big background");
         //Use the animation (NOT WORKING!!!!!!)
         //this.animatedTiles.init(this.map);
 
 
         //Create background I guess
-        this.background = this.map.createLayer("Background", this.tileset, 0, 0);
+        this.background = this.map.createLayer("Background", [this.tileset, this.caveColors], 0, 0);
         this.background.setScale(2.0);
 
         // Create a layer
@@ -79,6 +80,7 @@ class Platformer extends Phaser.Scene {
         my.sprite.player.body.setSize(15, 15);
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.body.setMaxSpeed(this.MAX_SPEED);
+        this.playerStepSound = this.sound.add("default step");
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
@@ -170,9 +172,17 @@ class Platformer extends Phaser.Scene {
         if(!my.sprite.player.body.blocked.down) {
             my.sprite.player.anims.play('jump');
         }
-        if(my.sprite.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(cursors.up)) {
-            // TODO: set a Y velocity to have the player "jump" upwards (negative Y direction)
-            my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
+        if(my.sprite.player.body.blocked.down) {
+            if (!(this.playerStates.stepSounds) && (my.sprite.player.body.velocity.x != 0)){
+                this.playerStates.stepSounds = true;
+                this.playerStepSound.play();
+                this.playerStepSound.on('complete', () => {
+                    this.playerStates.stepSounds = false;
+                });
+            }
+            if(Phaser.Input.Keyboard.JustDown(cursors.up)){
+                my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
+            }
         }
         //this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
         //console.log("X: "+my.sprite.player.x+", Y: "+my.sprite.player.y );
