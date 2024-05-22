@@ -7,11 +7,11 @@ class Platformer extends Phaser.Scene {
     }
     init() {
         // variables and settings
-        this.ACCELERATION = 500;
-        this.DRAG = 1500;    // DRAG < ACCELERATION = icy slide
+        this.ACCELERATION = 400;
+        this.DRAG = 1800;    // DRAG < ACCELERATION = icy slide
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -700;
-        this.MAX_SPEED = 900;
+        this.MAX_SPEED = 800;
         this.score = 0;
         this.spawnX = game.config.width/5;
         this.spawnY = 5*game.config.height/6;
@@ -24,6 +24,7 @@ class Platformer extends Phaser.Scene {
         this.scoreText = this.add.bitmapText(20, 20, 'text', 'Score: 0', 32);
         this.scoreText.scrollFactorX = 0
         this.scoreText.scrollFactorY = 0.
+
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 25);
@@ -31,6 +32,7 @@ class Platformer extends Phaser.Scene {
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
+        this.skyColors = this.map.addTilesetImage("Parallax maybe", "big background");
         this.tileset = this.map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
 
         //Use the animation (NOT WORKING!!!!!!)
@@ -38,7 +40,7 @@ class Platformer extends Phaser.Scene {
 
 
         //Create background I guess
-        this.background = this.map.createLayer("Background", this.tileset, 0, 0);
+        this.background = this.map.createLayer("Background", [this.tileset, this.skyColors], 0, 0);
         this.background.setScale(2.0);
 
         // Create a layer
@@ -119,10 +121,10 @@ class Platformer extends Phaser.Scene {
             lifespan: 500,
             // TODO: Try: gravityY: -400,
             gravityY: -200,
-            //quantity: 250,
-            tintFill: 0xFFFF00,
+            tint: 0xebb521,
         });
-
+        console.log(this.bubblesVFX);
+        //this.bubblesVFX.setTint(0xebb521);
         this.bubblesVFX.stop();
 
 

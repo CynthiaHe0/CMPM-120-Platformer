@@ -10,7 +10,8 @@
     "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
         "": {
-            "scaleInEditor": 1
+            "scaleInDock": 3,
+            "scaleInEditor": 1.5
         },
         "C:/Users/Cynthia/Desktop/CMPM-120/PlatformImprovement/assets/platformer-level-1.tmx": {
             "expandedObjectLayers": [
@@ -28,11 +29,17 @@
         },
         "platformer-level-1.tmx": {
             "scale": 1,
-            "selectedLayer": 3,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 1080,
-                "y": 225.5
+                "x": 1032,
+                "y": 223.5
             }
+        },
+        "platformer-level-1.tmx#Parallax maybe": {
+            "scaleInDock": 1
+        },
+        "platformer-level-1.tmx#kenny-tiny-town-tilemap-packed": {
+            "scaleInEditor": 1
         },
         "platformer-level-1.tmx#kenny_tilemap_packed": {
             "scaleInDock": 1.5,
@@ -40,7 +47,7 @@
         }
     },
     "last.exportedFilePath": "C:/Users/Cynthia/Desktop/CMPM-120/StarterPlatformer/assets",
-    "last.imagePath": "C:/Users/Cynthia/Desktop/CMPM-120/StarterPlatformer/assets",
+    "last.imagePath": "C:/Users/Cynthia/Desktop/CMPM-120/TopDownWorld/assets",
     "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
     "map.lastUsedFormat": "tmx",
     "map.tileHeight": 18,
@@ -57,7 +64,7 @@
     ],
     "tileset.embedInMap": true,
     "tileset.tileSize": {
-        "height": 18,
-        "width": 18
+        "height": 25,
+        "width": 25
     }
 }

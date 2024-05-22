@@ -1,0 +1,14 @@
+{ "columns":120,
+ "image":"Big_Background.png",
+ "imageheight":450,
+ "imagewidth":2160,
+ "margin":0,
+ "name":"Parallax maybe",
+ "spacing":0,
+ "tilecount":3000,
+ "tiledversion":"1.10.2",
+ "tileheight":18,
+ "tilewidth":18,
+ "type":"tileset",
+ "version":"1.10"
+}
