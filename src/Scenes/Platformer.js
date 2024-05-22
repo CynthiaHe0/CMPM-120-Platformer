@@ -25,14 +25,21 @@ class Platformer extends Phaser.Scene {
         this.scoreText.scrollFactorX = 0
         this.scoreText.scrollFactorY = 0.
 
+        this.parallax = this.add.tilemap("near_parallax", 16, 16, 120, 25);
+        let trees = this.parallax.addTilesetImage("kenny-tiny-town-tilemap-packed", "tiny_town");
+        let sky = this.parallax.addTilesetImage("Big_Background", "big background");
+        this.parallaxBackground = this.parallax.createLayer("Background", [sky, trees], 0, -200).setScrollFactor(0.5);
+        this.parallaxBackground.setScale(2);
+        this.parallaxTrees = this.parallax.createLayer("Tree Layer", trees, 0, -200).setScrollFactor(0.5);
+        this.parallaxTrees.setScale(2);
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
-        this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 25);
+        this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 10);
 
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
-        this.skyColors = this.map.addTilesetImage("Parallax maybe", "big background");
+        //this.skyColors = this.map.addTilesetImage("Parallax maybe", "big background");
         this.tileset = this.map.addTilesetImage("kenny_tilemap_packed", "tilemap_tiles");
 
         //Use the animation (NOT WORKING!!!!!!)
@@ -40,7 +47,7 @@ class Platformer extends Phaser.Scene {
 
 
         //Create background I guess
-        this.background = this.map.createLayer("Background", [this.tileset, this.skyColors], 0, 0);
+        this.background = this.map.createLayer("Background", this.tileset, 0, 0);
         this.background.setScale(2.0);
 
         // Create a layer
