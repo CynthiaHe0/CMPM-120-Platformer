@@ -22,6 +22,9 @@ class Load extends Phaser.Scene {
         //this.load.spritesheet("UI stuff", "tilemap_packed.png", 18, 18);
         this.load.audio("coin collected sound", ["impactGlass_medium_002.ogg"]);
         this.load.audio("default step", ["footstep_carpet_000.ogg"]);
+        this.load.audio("jump", ["impactPlate_medium_001.ogg"]);
+        this.load.audio("splash", ["water-splash-199583.ogg"]);
+        this.load.audio("bubbles", ["Bubble Sound Effect.mp3"]);
     }
 
     create() {

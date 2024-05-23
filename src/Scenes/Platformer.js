@@ -22,9 +22,7 @@ class Platformer extends Phaser.Scene {
 
     create() {
 
-        this.scoreText = this.add.bitmapText(20, 20, 'text', 'Score: 0', 32);
-        this.scoreText.scrollFactorX = 0
-        this.scoreText.scrollFactorY = 0.
+        
 
         this.parallax = this.add.tilemap("near_parallax", 16, 16, 120, 25);
         let trees = this.parallax.addTilesetImage("kenny-tiny-town-tilemap-packed", "tiny_town");
@@ -33,6 +31,7 @@ class Platformer extends Phaser.Scene {
         this.parallaxBackground.setScale(2);
         this.parallaxTrees = this.parallax.createLayer("Tree Layer", trees, 0, -200).setScrollFactor(0.5);
         this.parallaxTrees.setScale(2);
+
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 120, 10);
@@ -81,6 +80,9 @@ class Platformer extends Phaser.Scene {
         my.sprite.player.setCollideWorldBounds(true);
         my.sprite.player.body.setMaxSpeed(this.MAX_SPEED);
         this.playerStepSound = this.sound.add("default step");
+        this.playerJumpSound = this.sound.add("jump");
+        this.playerSplashSound = this.sound.add("splash");
+        this.playerBubbleSound = this.sound.add("bubbles");
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
@@ -136,6 +138,11 @@ class Platformer extends Phaser.Scene {
         //this.bubblesVFX.setTint(0xebb521);
         this.bubblesVFX.stop();
 
+        //This somehow broke as I was implementing parallax stuff
+        this.scoreText = this.add.bitmapText(20, 20, 'text', 'Score: 0', 32);
+        this.scoreText.scrollFactorX = 0;
+        this.scoreText.scrollFactorY = 0;
+        this.scoreText.depth = 100;
 
         // debug key listener (assigned to D key)
         this.input.keyboard.on('keydown-D', () => {
@@ -182,6 +189,7 @@ class Platformer extends Phaser.Scene {
             }
             if(Phaser.Input.Keyboard.JustDown(cursors.up)){
                 my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
+                this.playerJumpSound.play();
             }
         }
         //this.cameras.main.centerOn(my.sprite.player.x, my.sprite.player.y);
@@ -213,8 +221,10 @@ class Platformer extends Phaser.Scene {
             this.playerStates.inWater = true;
             //This is because gravity wasn't playing fair with the tween
             this.physics.world.gravity.y = 0;
+            this.playerSplashSound.play();
             this.bubblesVFX.start();
             this.bubblesVFX.startFollow(my.sprite.player, -5, -15, false);
+            this.playerBubbleSound.play();
             //Fun fact, the tween destroys itself after playing ._.
             //That or the this context was screwing me over earlier
             this.drowning = this.tweens.add({
@@ -225,6 +235,7 @@ class Platformer extends Phaser.Scene {
             });
             this.drowning.on('complete', () => {
                 this.bubblesVFX.stop();
+                this.playerBubbleSound.stop();
                 this.playerStates.inWater = false;
                 this.physics.world.gravity.y = 1500;
                 this.respawn();
