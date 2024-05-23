@@ -18,6 +18,7 @@ class Platformer extends Phaser.Scene {
         this.playerStates = {};
         this.playerStates.inWater = false;
         this.playerStates.stepSounds = false;
+        this.flagCount = 0;
     }
 
     create() {
@@ -83,6 +84,7 @@ class Platformer extends Phaser.Scene {
         this.playerJumpSound = this.sound.add("jump");
         this.playerSplashSound = this.sound.add("splash");
         this.playerBubbleSound = this.sound.add("bubbles");
+        this.checkPointSound = this.sound.add("yay");
 
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
@@ -113,6 +115,8 @@ class Platformer extends Phaser.Scene {
             collides: true
         });
         this.physics.add.overlap(my.sprite.player, this.flags, this.checkPoint, null, this);
+        
+        //PUT THE INIT AFTER ALL LAYERS CREATED
         this.animatedTiles.init(this.map);
 
         this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: -1, startAt: 5000 });
@@ -135,7 +139,7 @@ class Platformer extends Phaser.Scene {
             gravityY: -200,
             tint: 0xebb521,
         });
-        console.log(this.bubblesVFX);
+        
         //this.bubblesVFX.setTint(0xebb521);
         this.bubblesVFX.stop();
 
@@ -207,13 +211,16 @@ class Platformer extends Phaser.Scene {
         }
     }
     checkPoint(player, flag){
-        //console.log(flag);
-        if (flag.index == 112){
-            this.spawnX = flag.x * 36;
-            this.spawnY = flag.y * 36;
-        } else if (flag.index == 132){
-            this.spawnX = flag.x* 36;
-            this.spawnY = (flag.y - 1)* 36;
+        if (flag.index == 112 || flag.index == 132){
+            if (this.spawnX != flag.x * 36){
+                this.spawnX = flag.x * 36;
+                this.spawnY = 36 * (flag.index == 112 ? flag.y : flag.y-1);
+                this.checkPointSound.play();
+                this.flagCount++;
+            }
+        }
+        if (this.flagCount >= 2){
+            console.log("You win!");
         }
     }
     waterDeath(){

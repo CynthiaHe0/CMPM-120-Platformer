@@ -25,6 +25,7 @@ class Load extends Phaser.Scene {
         this.load.audio("jump", ["impactPlate_medium_001.ogg"]);
         this.load.audio("splash", ["water-splash-199583.ogg"]);
         this.load.audio("bubbles", ["Bubble Sound Effect.mp3"]);
+        this.load.audio("yay", ["kids-saying-yay!-made-with-Voicemod.mp3"]);
     }
 
     create() {
