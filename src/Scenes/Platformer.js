@@ -113,6 +113,7 @@ class Platformer extends Phaser.Scene {
             collides: true
         });
         this.physics.add.overlap(my.sprite.player, this.flags, this.checkPoint, null, this);
+        this.animatedTiles.init(this.map);
 
         this.timedEvent = this.time.addEvent({ delay: 10000, callback: this.onEvent, callbackScope: this, repeat: -1, startAt: 5000 });
         let line = new Phaser.Geom.Line(0, 0, 20, 0);
